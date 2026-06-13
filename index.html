@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Make in Nigeria — Business Spotlight HQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<style>
+/* ── TOKENS ── */
+:root {
+  --ink:       #0C0A1A;
+  --purple:    #4C3FC1;
+  --purple-d:  #2E2680;
+  --purple-l:  #EAE8FA;
+  --purple-m:  #7B74D8;
+  --gold:      #C9960C;
+  --gold-l:    #FEF3C7;
+  --teal:      #0E7490;
+  --teal-l:    #E0F2FE;
+  --green:     #166534;
+  --green-l:   #DCFCE7;
+  --coral:     #BE3A22;
+  --coral-l:   #FDE8E4;
+  --gray-1:    #F8F9FB;
+  --gray-2:    #E2E8F0;
+  --gray-3:    #94A3B8;
+  --gray-4:    #64748B;
+  --white:     #FFFFFF;
+  --radius:    10px;
+  --shadow:    0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
+  --shadow-l:  0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.08);
+}
+
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#F4F3FF;color:var(--ink);min-height:100vh;font-size:14px}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+input,textarea,select{font-family:inherit;font-size:14px}
+a{color:inherit;text-decoration:none}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:230px;flex-shrink:0;
+  background:var(--ink);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;
+  z-index:100;overflow-y:auto;
+}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-logo .brand{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--white);line-height:1.2}
+.sidebar-logo .sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+.nav{flex:1;padding:16px 0}
+.nav-section{padding:12px 20px 4px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);font-weight:600}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 20px;font-size:13px;font-weight:500;
+  color:rgba(255,255,255,.55);cursor:pointer;
+  border-left:3px solid transparent;
+  transition:all .15s;
+}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.05)}
+.nav-item.active{color:var(--white);background:rgba(76,63,193,.35);border-left-color:var(--purple-m)}
+.nav-item i{font-size:16px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--purple);color:var(--white);font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08)}
+.sidebar-footer .url{font-size:10px;color:rgba(255,255,255,.3)}
+
+/* ── MAIN ── */
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--white);border-bottom:1px solid var(--gray-2);
+  padding:0 28px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-size:15px;font-weight:600;color:var(--ink)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-date{font-size:12px;color:var(--gray-3)}
+.topbar-pill{
+  display:flex;align-items:center;gap:6px;
+  background:var(--green-l);color:var(--green);
+  font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;
+}
+.topbar-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}
+
+/* ── CONTENT ── */
+.content{padding:28px;flex:1}
+.section{display:none}
+.section.active{display:block}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:28px}
+.page-header h1{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.page-header p{font-size:13px;color:var(--gray-4);line-height:1.5}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--gray-2)}
+.stat-card .s-val{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--purple);line-height:1}
+.stat-card .s-lbl{font-size:12px;font-weight:600;color:var(--ink);margin-top:6px}
+.stat-card .s-sub{font-size:11px;color:var(--gray-3);margin-top:3px}
+.stat-card.gold .s-val{color:var(--gold)}
+.stat-card.teal .s-val{color:var(--teal)}
+.stat-card.green .s-val{color:var(--green)}
+
+/* ── CARDS GRID ── */
+.cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gray-2);overflow:hidden}
+.card-header{padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between}
+.card-header h2{font-size:14px;font-weight:700;color:var(--ink)}
+.card-body{padding:16px 20px 20px}
+.card.full{grid-column:1/-1}
+
+/* ── PROGRESS BAR ── */
+.prog-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.prog-label{font-size:12px;font-weight:500;color:var(--ink);min-width:110px}
+.prog-track{flex:1;height:7px;background:var(--gray-2);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.prog-val{font-size:12px;color:var(--gray-4);min-width:32px;text-align:right}
+
+/* ── PHASE BLOCKS ── */
+.phase{border:1px solid var(--gray-2);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.phase-hdr{padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.phase-hdr:hover{background:var(--gray-1)}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.phase-name{font-size:13px;font-weight:600;flex:1}
+.phase-meta{font-size:11px;color:var(--gray-3)}
+.phase-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.04em}
+.phase-body{border-top:1px solid var(--gray-2)}
+.task-row{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-bottom:1px solid var(--gray-2)}
+.task-row:last-child{border-bottom:none}
+.task-cb{width:18px;height:18px;border:2px solid var(--gray-2);border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s}
+.task-cb.done{background:var(--purple);border-color:var(--purple)}
+.task-cb.done::after{content:'✓';font-size:11px;color:var(--white);font-weight:700}
+.task-info{flex:1}
+.task-name{font-size:13px;color:var(--ink);line-height:1.4}
+.task-name.done{text-decoration:line-through;color:var(--gray-3)}
+.task-sub{font-size:11px;color:var(--gray-3);margin-top:3px;line-height:1.4}
+.pri{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:2px}
+.pri.high{background:var(--coral-l);color:var(--coral)}
+.pri.med{background:var(--gold-l);color:var(--gold)}
+.pri.low{background:var(--teal-l);color:var(--teal)}
+
+/* ── WEEK SCHEDULE ── */
+.week-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.day-card{background:var(--gray-1);border-radius:var(--radius);padding:14px;border:1px solid var(--gray-2)}
+.day-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:6px}
+.day-task{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.4}
+.day-fmt{font-size:11px;color:var(--gray-4);line-height:1.4}
+.day-plat{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.plat-tag{font-size:9px;font-weight:600;padding:2px 6px;border-radius:10px;background:var(--purple-l);color:var(--purple)}
+
+/* ── EXHIBITORS ── */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1.5px solid var(--gray-2);color:var(--gray-4);background:var(--white);transition:all .15s}
+.filter-btn.active{background:var(--purple);border-color:var(--purple);color:var(--white)}
+.filter-btn:hover:not(.active){border-color:var(--purple-m);color:var(--purple)}
+.ex-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ex-card{background:var(--white);border:1px solid var(--gray-2);border-radius:var(--radius);padding:14px;transition:box-shadow .15s}
+.ex-card:hover{box-shadow:var(--shadow-l)}
+.ex-code{font-size:10px;color:var(--gray-3);margin-bottom:3px;font-weight:500}
+.ex-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.3}
+.ex-cat{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-bottom:10px}
+.ex-btn{width:100%;padding:6px;font-size:11px;font-weight:600;border-radius:6px;border:1.5px solid var(--gray-2);color:var(--gray-4);display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s}
+.ex-btn:hover:not(.reached){border-color:var(--purple);color:var(--purple)}
+.ex-btn.reached{background:var(--green-l);border-color:var(--green);color:var(--green)}
+
+/* ── SCORING ── */
+.score-form{max-width:640px}
+.score-biz{display:flex;gap:10px;margin-bottom:24px}
+.score-biz input,.score-biz select{flex:1;padding:9px 12px;border:1.5px solid var(--gray-2);border-radius:var(--radius);font-size:13px;color:var(--ink)}
+.score-biz input:focus,.score-biz select:focus{outline:none;border-color:var(--purple)}
+.crit-card{border:1px solid var(--gray-2);border-radius:var(--radius);padding:16px;margin-bottom:12px;background:var(--white)}
+.crit-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.crit-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.crit-label{font-size:13px;font-weight:700;color:var(--ink)}
+.crit-desc{font-size:11px;color:var(--gray-4);margin-top:2px}
+.crit-score{margin-left:auto;font-size:20px;font-weight:700;color:var(--purple)}
+.stars{display:flex;gap:5px;margin-bottom:8px}
+.star{width:32px;height:32px;border-radius:7px;border:1.5px solid var(--gray-2);background:var(--gray-1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gray-3);transition:all .15s}
+.star.lit{border-color:transparent}
+.star-level{font-size:11px;color:var(--gray-3);font-style:italic;min-height:16px}
+.score-result{background:var(--white);border:1px solid var(--gray-2);border-radius:var(--radius);padding:20px;margin-top:16px}
+.score-total{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--purple);line-height:1}
+.verdict{font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block;margin-top:8px}
+.shortlist-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--gray-2);border-radius:var(--radius);margin-bottom:8px;background:var(--white)}
+.rank-num{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;min-width:24px}
+.sl-name{font-size:13px;font-weight:700;flex:1}
+.sl-score{font-size:18px;font-weight:700;color:var(--purple)}
+
+/* ── NOTES ── */
+.notes-area{width:100%;min-height:140px;border:1.5px solid var(--gray-2);border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--ink);resize:vertical;line-height:1.6}
+.notes-area:focus{outline:none;border-color:var(--purple)}
+.quick-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.quick-btn{font-size:12px;font-weight:500;padding:7px 14px;border-radius:8px;border:1.5px solid var(--gray-2);color:var(--gray-4);background:var(--white);transition:all .15s}
+.quick-btn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-l)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:all .15s}
+.btn-primary{background:var(--purple);color:var(--white)}
+.btn-primary:hover{background:var(--purple-d)}
+.btn-ghost{border:1.5px solid var(--gray-2);color:var(--gray-4)}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple)}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:40px 20px;color:var(--gray-3)}
+.empty i{font-size:32px;display:block;margin-bottom:8px}
+.empty p{font-size:13px}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .sidebar{width:0;transform:translateX(-100%)}
+  .sidebar.open{width:230px;transform:translateX(0)}
+  .main{margin-left:0}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .cards-grid{grid-template-columns:1fr}
+  .week-grid{grid-template-columns:repeat(2,1fr)}
+  .ex-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── UTILITIES ── */
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-8{gap:8px}.gap-12{gap:12px}.mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mb-16{margin-bottom:16px}.text-sm{font-size:12px}.text-xs{font-size:11px}.text-gray{color:var(--gray-4)}.fw-600{font-weight:600}.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="brand">Make in Nigeria</div>
+      <div class="sub">Business Spotlight HQ</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+      <div class="nav-item" onclick="nav('actions',this)"><i class="ti ti-clipboard-check"></i>Action Plan</div>
+
+      <div class="nav-section">Operations</div>
+      <div class="nav-item" onclick="nav('calendar',this)"><i class="ti ti-calendar-week"></i>Content Calendar</div>
+      <div class="nav-item" onclick="nav('exhibitors',this)"><i class="ti ti-building-store"></i>Exhibitors <span class="nav-badge" id="ex-badge">43</span></div>
+
+      <div class="nav-section">Tools</div>
+      <div class="nav-item" onclick="nav('scoring',this)"><i class="ti ti-chart-bar"></i>Scoring Tool</div>
+      <div class="nav-item" onclick="nav('notes',this)"><i class="ti ti-notes"></i>Team Notes</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="url">makeinnigeria.com</div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+    <header class="topbar">
+      <div class="flex items-center gap-12">
+        <button class="btn btn-ghost" onclick="document.getElementById('sidebar').classList.toggle('open')" style="padding:6px 10px;display:none" id="menu-btn"><i class="ti ti-menu-2"></i></button>
+        <span class="topbar-title" id="page-title">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-date" id="today-date"></span>
+        <span class="topbar-pill">Season 1 Live</span>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ══ DASHBOARD ══════════════════════════════════════════════════════ -->
+      <div id="sec-dashboard" class="section active">
+        <div class="page-header">
+          <h1>Business Spotlight HQ</h1>
+          <p>Port Harcourt & Rivers State · Your weekly operations command centre</p>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="s-val" id="d-reached">0</div>
+            <div class="s-lbl">Exhibitors reached</div>
+            <div class="s-sub">of 43 total</div>
+          </div>
+          <div class="stat-card gold">
+            <div class="s-val" id="d-tasks">0/8</div>
+            <div class="s-lbl">Week 1 tasks done</div>
+            <div class="s-sub">Immediate actions</div>
+          </div>
+          <div class="stat-card teal">
+            <div class="s-val" id="d-scored">0</div>
+            <div class="s-lbl">Businesses scored</div>
+            <div class="s-sub">Shortlist tracker</div>
+          </div>
+          <div class="stat-card green">
+            <div class="s-val">4</div>
+            <div class="s-lbl">Content formats</div>
+            <div class="s-sub">From every visit</div>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-header"><h2>Weekly rhythm</h2><span class="text-xs text-gray">This week</span></div>
+            <div class="card-body">
+              <div class="prog-row"><span class="prog-label">Monday — Teaser</span><div class="prog-track"><div class="prog-fill" style="width:100%;background:var(--purple)"></div></div><span class="prog-val">Publish</span></div>
+              <div class="prog-row"><span class="prog-label">Wednesday — BTS</span><div class="prog-track"><div class="prog-fill" style="width:100%;background:var(--purple)"></div></div><span class="prog-val">Publish</span></div>
+              <div class="prog-row"><span class="prog-label">Friday — Episode</span><div class="prog-track"><div class="prog-fill" style="width:60%;background:var(--gold)"></div></div><span class="prog-val">Edit</span></div>
+              <div class="prog-row"><span class="prog-label">Weekend — Engage</span><div class="prog-track"><div class="prog-fill" style="width:20%;background:var(--gray-2)"></div></div><span class="prog-val">Queue</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h2>Outreach progress</h2><span class="text-xs text-gray" id="reach-pct">0% contacted</span></div>
+            <div class="card-body">
+              <div style="display:flex;align-items:center;justify-content:center;padding:12px 0">
+                <div style="position:relative;width:110px;height:110px">
+                  <svg width="110" height="110" style="transform:rotate(-90deg)">
+                    <circle cx="55" cy="55" r="45" fill="none" stroke="var(--gray-2)" stroke-width="10"/>
+                    <circle cx="55" cy="55" r="45" fill="none" stroke="var(--purple)" stroke-width="10"
+                      stroke-dasharray="282.7" stroke-dashoffset="282.7" id="reach-ring" stroke-linecap="round"/>
+                  </svg>
+                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--purple)" id="reach-num">0</div>
+                    <div style="font-size:10px;color:var(--gray-3)">of 43</div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-xs text-gray" style="text-align:center;margin-top:4px">Mark exhibitors in the Exhibitors tab</div>
+            </div>
+          </div>
+
+          <div class="card full">
+            <div class="card-header"><h2>3-month milestones</h2></div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px">
+                <div style="padding:14px;background:var(--purple-l);border-radius:8px">
+                  <div style="font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Month 3</div>
+                  <div style="font-size:13px;font-weight:600;color:var(--ink)">30+ businesses featured</div>
+                  <div style="font-size:11px;color:var(--gray-4);margin-top:4px">Consistent weekly publishing</div>
+                </div>
+                <div style="padding:14px;background:var(--teal-l);border-radius:8px">
+                  <div style="font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Month 6</div>
+                  <div style="font-size:13px;font-weight:600;color:var(--ink)">Recognised Rivers State platform</div>
+                  <div style="font-size:11px;color:var(--gray-4);margin-top:4px">First sponsor + live meetup</div>
+                </div>
+                <div style="padding:14px;background:var(--green-l);border-radius:8px">
+                  <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Month 12</div>
+                  <div style="font-size:13px;font-weight:600;color:var(--ink)">National expansion begins</div>
+                  <div style="font-size:11px;color:var(--gray-4);margin-top:4px">Business directory + multi-state</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ACTIONS ════════════════════════════════════════════════════════ -->
+      <div id="sec-actions" class="section">
+        <div class="page-header">
+          <h1>Action Plan</h1>
+          <p>Four phases from structuring to national expansion. Check off tasks as you complete them.</p>
+        </div>
+
+        <div id="action-phases"></div>
+      </div>
+
+      <!-- ══ CALENDAR ═══════════════════════════════════════════════════════ -->
+      <div id="sec-calendar" class="section">
+        <div class="page-header">
+          <h1>Content Calendar</h1>
+          <p>Fixed weekly schedule. Every business visit produces content for the full week.</p>
+        </div>
+
+        <div class="week-grid" style="margin-bottom:28px">
+          <div class="day-card">
+            <div class="day-name">Monday</div>
+            <div class="day-task">Business teaser post</div>
+            <div class="day-fmt">Founder quote + product photo to build anticipation</div>
+            <div class="day-plat"><span class="plat-tag">Instagram</span><span class="plat-tag">Facebook</span><span class="plat-tag">TikTok</span><span class="plat-tag">LinkedIn</span></div>
+          </div>
+          <div class="day-card">
+            <div class="day-name">Wednesday</div>
+            <div class="day-task">Behind-the-scenes content</div>
+            <div class="day-fmt">Short clip from the visit or unscripted founder moment</div>
+            <div class="day-plat"><span class="plat-tag">Reels</span><span class="plat-tag">TikTok</span><span class="plat-tag">Facebook</span></div>
+          </div>
+          <div class="day-card">
+            <div class="day-name">Friday</div>
+            <div class="day-task">Full Spotlight episode</div>
+            <div class="day-fmt">Complete 5-segment interview & founder story (5–15 min)</div>
+            <div class="day-plat"><span class="plat-tag">YouTube</span><span class="plat-tag">Facebook</span><span class="plat-tag">LinkedIn</span></div>
+          </div>
+          <div class="day-card">
+            <div class="day-name">Weekend</div>
+            <div class="day-task">Engagement content</div>
+            <div class="day-fmt">Quote graphic, business fact slide, polls, highlights</div>
+            <div class="day-plat"><span class="plat-tag">All platforms</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h2>Content formats per visit</h2><span class="text-xs text-gray">One visit = one full week</span></div>
+          <div class="card-body">
+            <table style="width:100%;border-collapse:collapse">
+              <thead><tr style="border-bottom:2px solid var(--purple)">
+                <th style="text-align:left;padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-4)">Format</th>
+                <th style="text-align:left;padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-4)">Purpose</th>
+                <th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-4)">Length</th>
+                <th style="padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-4)">Platform</th>
+              </tr></thead>
+              <tbody id="content-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ EXHIBITORS ═════════════════════════════════════════════════════ -->
+      <div id="sec-exhibitors" class="section">
+        <div class="page-header">
+          <h1>2025 Exhibitors</h1>
+          <p>43 businesses from the 2025 event. Mark each one as you make contact.</p>
+        </div>
+        <div class="filter-row" id="cat-filters"></div>
+        <div class="ex-grid" id="ex-grid"></div>
+      </div>
+
+      <!-- ══ SCORING ════════════════════════════════════════════════════════ -->
+      <div id="sec-scoring" class="section">
+        <div class="page-header">
+          <h1>Business Scoring Tool</h1>
+          <p>Score every business before scheduling a visit. Minimum 50/100 required for selection.</p>
+        </div>
+        <div class="cards-grid">
+          <div class="card" style="grid-column:1">
+            <div class="card-header"><h2>Score a business</h2></div>
+            <div class="card-body">
+              <div class="score-biz">
+                <input id="sc-name" placeholder="Business name"/>
+                <select id="sc-cat">
+                  <option value="">Category...</option>
+                  <option>Fashion</option><option>Technology</option><option>Agriculture</option>
+                  <option>Food & Drink</option><option>Health</option><option>Media</option>
+                  <option>Finance</option><option>Other</option>
+                </select>
+              </div>
+              <div id="crit-list"></div>
+              <div class="score-result" id="score-result" style="display:none">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs text-gray fw-600" style="text-transform:uppercase;letter-spacing:.06em">Weighted score</div>
+                    <div class="score-total" id="sc-total">0</div>
+                    <span class="verdict" id="sc-verdict"></span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+                    <button class="btn btn-primary" onclick="saveScore()"><i class="ti ti-device-floppy"></i>Save to shortlist</button>
+                    <button class="btn btn-ghost" onclick="resetScore()"><i class="ti ti-refresh"></i>Reset</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="grid-column:2">
+            <div class="card-header"><h2>Shortlist</h2><span class="text-xs text-gray" id="sl-count">0 businesses</span></div>
+            <div class="card-body">
+              <div id="shortlist-body"><div class="empty"><i class="ti ti-list"></i><p>Score and save businesses to build your shortlist</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ NOTES ══════════════════════════════════════════════════════════ -->
+      <div id="sec-notes" class="section">
+        <div class="page-header">
+          <h1>Team Notes</h1>
+          <p>Meeting notes, decisions, blockers, contacts. Saved in your browser.</p>
+        </div>
+        <div class="card" style="max-width:720px">
+          <div class="card-header"><h2>Notes</h2></div>
+          <div class="card-body">
+            <textarea class="notes-area" id="notes-field" placeholder="Add meeting notes, decisions, blockers, contact details..."></textarea>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+              <button class="btn btn-primary" onclick="saveNotes()"><i class="ti ti-device-floppy"></i>Save</button>
+              <span id="notes-saved" style="font-size:12px;color:var(--green);display:none"><i class="ti ti-check"></i> Saved</span>
+            </div>
+            <div style="margin-top:20px;border-top:1px solid var(--gray-2);padding-top:16px">
+              <div class="text-xs fw-600 text-gray" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Quick actions</div>
+              <div class="quick-btns">
+                <button class="quick-btn" onclick="sendPrompt('Draft a WhatsApp outreach message to a 2025 Make in Nigeria exhibitor for the Business Spotlight program')">Draft outreach message ↗</button>
+                <button class="quick-btn" onclick="sendPrompt('Write an interview script tip for putting a shy Nigerian business founder at ease on camera')">Interview tips ↗</button>
+                <button class="quick-btn" onclick="sendPrompt('Draft a partnership proposal for Make in Nigeria to send to a media house in Port Harcourt')">Partnership proposal ↗</button>
+                <button class="quick-btn" onclick="sendPrompt('Suggest 5 content caption ideas for a Make in Nigeria Business Spotlight episode about a fashion brand in Port Harcourt')">Caption ideas ↗</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const EXHIBITORS = [
+  {code:'A03',name:'Total 9ja',cat:'Food & Drink'},
+  {code:'A04',name:'Dubs Garment Factory',cat:'Fashion'},
+  {code:'A05',name:'Sahara Sunrise',cat:'Food & Drink'},
+  {code:'A07',name:'Mema Family Care',cat:'Health'},
+  {code:'A08',name:'Irvin Global & Investment Ltd',cat:'Finance'},
+  {code:'A09',name:'Nakupenda Technologies',cat:'Technology'},
+  {code:'B21',name:'Westerfield',cat:'Fashion'},
+  {code:'B22',name:'SlimePay',cat:'Technology'},
+  {code:'B23',name:'SilverKuun',cat:'Other'},
+  {code:'B24',name:'Success Haven Group',cat:'Finance'},
+  {code:'B26',name:'P.I Nature Limited',cat:'Health'},
+  {code:'B27',name:'Total Health Trust Limited',cat:'Health'},
+  {code:'B28',name:'Zoom 36',cat:'Technology'},
+  {code:'B30',name:'Nigerian Export Promotion Council',cat:'Other'},
+  {code:'B31',name:'Elandco Services Limited',cat:'Other'},
+  {code:'B33',name:'Anointed Scissors',cat:'Fashion'},
+  {code:'B34',name:'WimimArt',cat:'Media'},
+  {code:'B35',name:'Props Nation',cat:'Media'},
+  {code:'B36',name:'Amaranthine Media',cat:'Media'},
+  {code:'B37',name:'Jei Beads and Crafts',cat:'Fashion'},
+  {code:'B38',name:'Mickottons',cat:'Fashion'},
+  {code:'B39',name:'Prebeluxe Apartment Ltd',cat:'Other'},
+  {code:'B40',name:'Write Trove Educational Resources',cat:'Other'},
+  {code:'C41',name:'JRD Mega Concepts Ltd',cat:'Other'},
+  {code:'C42',name:'Oilwell Palms Farm',cat:'Agriculture'},
+  {code:'C43',name:'De Generals Apparel',cat:'Fashion'},
+  {code:'C44',name:'Royalteck\'n\'Gadgets Ltd',cat:'Technology'},
+  {code:'C45',name:'Glosunto',cat:'Other'},
+  {code:'C46',name:'EuniceChris',cat:'Fashion'},
+  {code:'C47',name:'The Scented Room',cat:'Food & Drink'},
+  {code:'C48',name:'Jinja Herbal Extract',cat:'Health'},
+  {code:'C49',name:'Hanauwears',cat:'Fashion'},
+  {code:'C50',name:'Win Realty / Den of Value',cat:'Other'},
+  {code:'C51',name:'Janechuks Mixed Spices',cat:'Food & Drink'},
+  {code:'C52',name:"Nessa's Glamour Collection",cat:'Fashion'},
+  {code:'C53',name:'Emple Insurance Ltd',cat:'Finance'},
+  {code:'C54',name:'Palm Nectar Breweries',cat:'Food & Drink'},
+  {code:'—',name:'Tecel Integrated Farm',cat:'Agriculture'},
+  {code:'—',name:'Sidafeco Venture Ltd',cat:'Agriculture'},
+  {code:'—',name:'Move-Ahead Integrated Farm',cat:'Agriculture'},
+  {code:'—',name:'Ucan Farm',cat:'Agriculture'},
+  {code:'—',name:'Pork Chicken and Things',cat:'Food & Drink'},
+];
+
+const CAT_COLORS = {
+  'Fashion':    {bg:'#FDE8E4',tc:'#BE3A22'},
+  'Technology': {bg:'#EAE8FA',tc:'#4C3FC1'},
+  'Agriculture':{bg:'#DCFCE7',tc:'#166534'},
+  'Food & Drink':{bg:'#FEF3C7',tc:'#B45309'},
+  'Health':     {bg:'#E0F2FE',tc:'#0E7490'},
+  'Media':      {bg:'#FCE7F3',tc:'#9D174D'},
+  'Finance':    {bg:'#E0F2FE',tc:'#0C4A6E'},
+  'Other':      {bg:'#F1F5F9',tc:'#475569'},
+};
+
+const PHASES = [
+  {
+    label:'Phase 1', title:'Structuring & Preparation', period:'Week 1',
+    dotColor:'var(--purple)', tagBg:'var(--purple-l)', tagTc:'var(--purple)', tagText:'Do now',
+    tasks:[
+      {t:'Recover the 2025 exhibitor database',s:'Compile names, contacts, and categories from the list.',pri:'high'},
+      {t:'Assemble the full team',s:'Confirm all 8 roles: videographer, photographer, editor, script writer, social media manager, host, outreach & logistics.',pri:'high'},
+      {t:'Design the Business Spotlight visual identity',s:'Intro animation, logo, lower-thirds, social templates, branded video assets.',pri:'high'},
+      {t:'Finalise outreach message templates',s:'Customise the three WhatsApp/DM versions for your team.',pri:'high'},
+      {t:'Select the first 10 businesses to feature',s:'Apply the scoring criteria. Priority: 2025 exhibitors first.',pri:'high'},
+      {t:'Execute pilot production',s:'Visit first 2–3 businesses and produce the first episode to test the workflow.',pri:'high'},
+      {t:'Set up all social media channels',s:'Facebook, Instagram, TikTok, YouTube, LinkedIn — fully branded and ready.',pri:'med'},
+      {t:'Begin process documentation',s:'Record every workflow and template for future national scaling.',pri:'low'},
+    ]
+  },
+  {
+    label:'Phase 2', title:'Business Outreach', period:'Week 2',
+    dotColor:'var(--teal)', tagBg:'var(--teal-l)', tagTc:'var(--teal)', tagText:'Week 2',
+    tasks:[
+      {t:'Contact all 43 exhibitors',s:'Phone first → WhatsApp within 24hrs → social DM if no response after 48hrs.',pri:'high'},
+      {t:'Communicate the free spotlight offer clearly',s:'Professional video, photography, full social distribution — no cost.',pri:'med'},
+      {t:'Build the Season 1 visitation calendar',s:'2–3 businesses per week confirmed and scheduled.',pri:'high'},
+      {t:'Identify Priority 2 targets',s:'High-impact businesses not on the 2025 exhibitor list.',pri:'med'},
+    ]
+  },
+  {
+    label:'Phase 3', title:'Content Production', period:'Week 3 onwards',
+    dotColor:'var(--gold)', tagBg:'var(--gold-l)', tagTc:'var(--gold)', tagText:'Ongoing',
+    tasks:[
+      {t:'Execute 2–3 business visits per week',s:'Interviews, b-roll, product photography, founder story.',pri:'high'},
+      {t:'Edit into all content formats',s:'Long-form episode + Reels/TikTok/Shorts + quote graphics + founder post.',pri:'high'},
+      {t:'Publish on schedule every single week',s:'Monday teaser → Wednesday BTS → Friday episode → Weekend engagement.',pri:'high'},
+      {t:'Activate community engagement',s:'Audience nominations, polls, reshare campaigns, comment responses.',pri:'med'},
+    ]
+  },
+  {
+    label:'Phase 4', title:'Partnerships & Growth', period:'Month 2 onwards',
+    dotColor:'var(--green)', tagBg:'var(--green-l)', tagTc:'var(--green)', tagText:'Growth',
+    tasks:[
+      {t:'Approach media houses and business associations',s:'Formal partnership proposals once 10+ episodes are live.',pri:'med'},
+      {t:'Pitch for programme sponsorship',s:'Use audience metrics and episode archive to demonstrate value.',pri:'med'},
+      {t:'Launch first physical networking meetup',s:'Target: month 6.',pri:'low'},
+      {t:'Plan the Make in Nigeria Digital Business Directory',s:'12-month milestone — national expansion blueprint.',pri:'low'},
+    ]
+  },
+];
+
+const CRITERIA = [
+  {id:'innovation',label:'Innovation',weight:20,icon:'ti-bulb',bg:'#EAE8FA',ic:'#4C3FC1',
+    desc:'Unique approach, original product, novel use of local resources',
+    levels:['No discernible novelty','Slight variation on existing idea','Some original thinking','Clearly differentiated','Groundbreaking']},
+  {id:'impact',label:'Local Impact',weight:25,icon:'ti-map-pin',bg:'#DCFCE7',ic:'#166534',
+    desc:'Jobs created, livelihoods supported, economic contribution to Rivers State',
+    levels:['No visible local benefit','Minimal local effect','Moderate positive impact','Significant contribution','Transformative impact']},
+  {id:'consistency',label:'Consistency',weight:20,icon:'ti-repeat',bg:'#FEF3C7',ic:'#B45309',
+    desc:'Operational stability, regular output, business longevity',
+    levels:['Inactive or intermittent','Occasional activity','Mostly consistent','Reliably active','Exceptionally sustained']},
+  {id:'quality',label:'Quality',weight:20,icon:'ti-rosette',bg:'#FDE8E4',ic:'#BE3A22',
+    desc:'Product/service standard, presentation, customer satisfaction',
+    levels:['Below standard','Needs improvement','Acceptable quality','High quality output','Market-leading quality']},
+  {id:'community',label:'Community Relevance',weight:15,icon:'ti-users',bg:'#E0F2FE',ic:'#0E7490',
+    desc:'Resonance with local culture, audience engagement, community visibility',
+    levels:['Disconnected','Slight connection','Moderately community-facing','Strong community ties','Deeply embedded locally']},
+];
+
+const CONTENT_FORMATS = [
+  ['Long-form episode','Full Business Spotlight — all 5 interview segments','5–15 min','YouTube + Facebook'],
+  ['Instagram Reel','Best quote, product reveal, or founder soundbite','30–90 sec','Instagram'],
+  ['TikTok clip','Behind-the-scenes or founder insight','15–60 sec','TikTok'],
+  ['YouTube Short','Product showcase or one key founder insight','Under 60 sec','YouTube'],
+  ['Founder quote graphic','Branded pull-quote from the most impactful moment','Static 1:1','All platforms'],
+  ['Founder spotlight post','Intro post: photo + business name + one-line story','Static + caption','All platforms'],
+  ['Business fact slide','One surprising or inspiring fact about the business','Carousel or static','All platforms'],
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let reached = {};
+let taskDone = {};
+let scores   = {innovation:0,impact:0,consistency:0,quality:0,community:0};
+let shortlist = [];
+let exFilter = 'All';
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  loadFromStorage();
+  buildActions();
+  buildContentTable();
+  buildExhibitors();
+  buildScoring();
+  updateDashboard();
+  if(window.innerWidth < 768) document.getElementById('menu-btn').style.display='flex';
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function nav(id, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  el.classList.add('active');
+  const titles = {dashboard:'Dashboard',actions:'Action Plan',calendar:'Content Calendar',exhibitors:'Exhibitors',scoring:'Scoring Tool',notes:'Team Notes'};
+  document.getElementById('page-title').textContent = titles[id]||id;
+  if(id==='notes') document.getElementById('notes-field').value = localStorage.getItem('min_notes')||'';
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+function buildActions(){
+  const wrap = document.getElementById('action-phases');
+  wrap.innerHTML = '';
+  PHASES.forEach((ph,pi) => {
+    const done = ph.tasks.filter((_,ti)=>taskDone[`${pi}-${ti}`]).length;
+    const el = document.createElement('div');
+    el.className = 'phase';
+    el.innerHTML = `
+      <div class="phase-hdr" onclick="togglePhase(this)">
+        <div class="phase-dot" style="background:${ph.dotColor}"></div>
+        <div class="phase-name">${ph.label} — ${ph.title}</div>
+        <span class="phase-tag" style="background:${ph.tagBg};color:${ph.tagTc}">${ph.tagText}</span>
+        <div class="phase-meta" style="margin-left:8px">${done}/${ph.tasks.length} done</div>
+        <i class="ti ti-chevron-down" style="color:var(--gray-3);margin-left:8px;font-size:14px"></i>
+      </div>
+      <div class="phase-body" ${pi>0?'style="display:none"':''}>
+        ${ph.tasks.map((task,ti)=>`
+          <div class="task-row">
+            <div class="task-cb ${taskDone[`${pi}-${ti}`]?'done':''}" onclick="toggleTask(${pi},${ti},this)" id="cb-${pi}-${ti}"></div>
+            <div class="task-info">
+              <div class="task-name ${taskDone[`${pi}-${ti}`]?'done':''}" id="tn-${pi}-${ti}">${task.t}</div>
+              <div class="task-sub">${task.s}</div>
+            </div>
+            <div class="pri ${task.pri}">${task.pri.toUpperCase()}</div>
+          </div>
+        `).join('')}
+      </div>`;
+    wrap.appendChild(el);
+  });
+}
+
+function togglePhase(hdr){
+  const body = hdr.nextElementSibling;
+  const icon = hdr.querySelector('i');
+  const open = body.style.display!=='none';
+  body.style.display = open?'none':'block';
+  icon.style.transform = open?'':'rotate(180deg)';
+}
+
+function toggleTask(pi,ti,cb){
+  const key = `${pi}-${ti}`;
+  taskDone[key] = !taskDone[key];
+  cb.classList.toggle('done');
+  document.getElementById(`tn-${pi}-${ti}`).classList.toggle('done');
+  // update phase meta
+  const done = PHASES[pi].tasks.filter((_,i)=>taskDone[`${pi}-${i}`]).length;
+  cb.closest('.phase').querySelector('.phase-meta').textContent = `${done}/${PHASES[pi].tasks.length} done`;
+  saveToStorage();
+  updateDashboard();
+}
+
+// ── CONTENT TABLE ─────────────────────────────────────────────────────────────
+function buildContentTable(){
+  const tb = document.getElementById('content-table');
+  tb.innerHTML = CONTENT_FORMATS.map((r,i)=>`
+    <tr style="border-bottom:1px solid var(--gray-2);background:${i%2===0?'var(--gray-1)':'var(--white)'}">
+      <td style="padding:10px;font-weight:600;font-size:12px;color:var(--purple)">${r[0]}</td>
+      <td style="padding:10px;font-size:12px;color:var(--ink)">${r[1]}</td>
+      <td style="padding:10px;font-size:11px;color:var(--gray-4);text-align:center">${r[2]}</td>
+      <td style="padding:10px;font-size:11px;color:var(--teal);text-align:center">${r[3]}</td>
+    </tr>`).join('');
+}
+
+// ── EXHIBITORS ────────────────────────────────────────────────────────────────
+function buildExhibitors(){
+  // filters
+  const cats = ['All',...new Set(EXHIBITORS.map(e=>e.cat))].sort((a,b)=>a==='All'?-1:b==='All'?1:a.localeCompare(b));
+  const frow = document.getElementById('cat-filters');
+  frow.innerHTML = cats.map(c=>`<button class="filter-btn ${c===exFilter?'active':''}" onclick="filterEx('${c}',this)">${c}</button>`).join('');
+  renderExGrid();
+}
+
+function filterEx(cat,btn){
+  exFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderExGrid();
+}
+
+function renderExGrid(){
+  const grid = document.getElementById('ex-grid');
+  const filtered = EXHIBITORS.filter(e=>exFilter==='All'||e.cat===exFilter);
+  const cc = CAT_COLORS[exFilter]||{};
+  grid.innerHTML = filtered.map((ex,i)=>{
+    const idx = EXHIBITORS.indexOf(ex);
+    const c = CAT_COLORS[ex.cat]||{bg:'#F1F5F9',tc:'#475569'};
+    const done = reached[idx];
+    return `<div class="ex-card">
+      <div class="ex-code">${ex.code}</div>
+      <div class="ex-name">${ex.name}</div>
+      <span class="ex-cat" style="background:${c.bg};color:${c.tc}">${ex.cat}</span>
+      <button class="ex-btn ${done?'reached':''}" onclick="markReached(${idx},this)">
+        <i class="ti ${done?'ti-check':'ti-phone'}"></i>
+        ${done?'Reached out':'Mark reached out'}
+      </button>
+    </div>`;
+  }).join('');
+}
+
+function markReached(idx,btn){
+  reached[idx] = !reached[idx];
+  btn.className = 'ex-btn '+(reached[idx]?'reached':'');
+  btn.innerHTML = `<i class="ti ${reached[idx]?'ti-check':'ti-phone'}"></i>${reached[idx]?'Reached out':'Mark reached out'}`;
+  saveToStorage();
+  updateDashboard();
+}
+
+// ── SCORING ───────────────────────────────────────────────────────────────────
+function buildScoring(){
+  const wrap = document.getElementById('crit-list');
+  wrap.innerHTML = CRITERIA.map(c=>`
+    <div class="crit-card">
+      <div class="crit-top">
+        <div class="crit-icon" style="background:${c.bg}"><i class="ti ${c.icon}" style="color:${c.ic}"></i></div>
+        <div><div class="crit-label">${c.label} <span style="font-size:10px;color:var(--purple);font-weight:700">${c.weight}%</span></div>
+        <div class="crit-desc">${c.desc}</div></div>
+        <div class="crit-score" id="cs-${c.id}">—</div>
+      </div>
+      <div class="stars" id="stars-${c.id}">
+        ${[1,2,3,4,5].map(n=>`<div class="star" data-val="${n}" onclick="setStar('${c.id}',${n})" style=""><i class="ti ti-star" style="font-size:13px"></i></div>`).join('')}
+      </div>
+      <div class="star-level" id="sl-${c.id}"></div>
+    </div>`).join('');
+}
+
+function setStar(id,val){
+  scores[id]=val;
+  const c = CRITERIA.find(x=>x.id===id);
+  document.querySelectorAll(`#stars-${id} .star`).forEach((s,i)=>{
+    if(i<val){s.classList.add('lit');s.style.background=c.bg;s.querySelector('i').style.color=c.ic;}
+    else{s.classList.remove('lit');s.style.background='';s.querySelector('i').style.color='';}
+  });
+  document.getElementById(`cs-${id}`).textContent=`${val}/5`;
+  document.getElementById(`sl-${id}`).textContent=c.levels[val-1];
+  recalcScore();
+}
+
+function recalcScore(){
+  const all = CRITERIA.every(c=>scores[c.id]>0);
+  let weighted=0;
+  CRITERIA.forEach(c=>{if(scores[c.id]>0) weighted+=(scores[c.id]/5)*(c.weight/100)*100;});
+  const s=Math.round(weighted);
+  document.getElementById('score-result').style.display='block';
+  document.getElementById('sc-total').textContent = all?s:'~'+s;
+  const v = all?(s>=80?{t:'Highly recommended',bg:'var(--green-l)',tc:'var(--green)'}:s>=65?{t:'Recommended',bg:'var(--teal-l)',tc:'var(--teal)'}:s>=50?{t:'Consider later',bg:'var(--gold-l)',tc:'var(--gold)'}:{t:'Not ready yet',bg:'var(--coral-l)',tc:'var(--coral)'}):null;
+  const vEl=document.getElementById('sc-verdict');
+  if(v){vEl.textContent=v.t;vEl.style.background=v.bg;vEl.style.color=v.tc;}
+  else{vEl.textContent='Score all criteria';vEl.style.background='var(--gray-1)';vEl.style.color='var(--gray-4)';}
+}
+
+function saveScore(){
+  const name=document.getElementById('sc-name').value.trim()||'Unnamed';
+  const cat=document.getElementById('sc-cat').value||'—';
+  const all=CRITERIA.every(c=>scores[c.id]>0);
+  if(!all){alert('Please score all 5 criteria first.');return;}
+  let w=0; CRITERIA.forEach(c=>{w+=(scores[c.id]/5)*(c.weight/100)*100;});
+  shortlist.push({name,cat,score:Math.round(w)});
+  shortlist.sort((a,b)=>b.score-a.score);
+  renderShortlist();
+  saveToStorage();
+  updateDashboard();
+}
+
+function renderShortlist(){
+  const wrap=document.getElementById('shortlist-body');
+  document.getElementById('sl-count').textContent=shortlist.length+' businesses';
+  if(!shortlist.length){wrap.innerHTML='<div class="empty"><i class="ti ti-list"></i><p>Score and save businesses to build your shortlist</p></div>';return;}
+  wrap.innerHTML=shortlist.map((e,i)=>{
+    const col=e.score>=80?'var(--green)':e.score>=65?'var(--teal)':e.score>=50?'var(--gold)':'var(--coral)';
+    return `<div class="shortlist-row">
+      <div class="rank-num" style="color:${col}">${i+1}</div>
+      <div><div class="sl-name">${e.name}</div><div class="text-xs text-gray">${e.cat}</div></div>
+      <div class="sl-score" style="color:${col}">${e.score}<span style="font-size:12px;color:var(--gray-3)">/100</span></div>
+      <button onclick="shortlist.splice(${i},1);renderShortlist();saveToStorage();updateDashboard();" style="color:var(--gray-3);font-size:16px;padding:4px"><i class="ti ti-x"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function resetScore(){
+  CRITERIA.forEach(c=>{
+    scores[c.id]=0;
+    document.querySelectorAll(`#stars-${c.id} .star`).forEach(s=>{s.classList.remove('lit');s.style.background='';s.querySelector('i').style.color='';});
+    document.getElementById(`cs-${c.id}`).textContent='—';
+    document.getElementById(`sl-${c.id}`).textContent='';
+  });
+  document.getElementById('sc-name').value='';
+  document.getElementById('sc-cat').value='';
+  document.getElementById('score-result').style.display='none';
+}
+
+// ── NOTES ─────────────────────────────────────────────────────────────────────
+function saveNotes(){
+  localStorage.setItem('min_notes',document.getElementById('notes-field').value);
+  const s=document.getElementById('notes-saved');
+  s.style.display='inline';
+  setTimeout(()=>s.style.display='none',2500);
+}
+
+// ── DASHBOARD COUNTERS ────────────────────────────────────────────────────────
+function updateDashboard(){
+  const r=Object.values(reached).filter(Boolean).length;
+  document.getElementById('d-reached').textContent=r;
+  document.getElementById('reach-num').textContent=r;
+  document.getElementById('reach-pct').textContent=Math.round(r/43*100)+'% contacted';
+  const circ=document.getElementById('reach-ring');
+  if(circ) circ.style.strokeDashoffset=282.7-(282.7*(r/43));
+
+  const p0done=PHASES[0].tasks.filter((_,i)=>taskDone[`0-${i}`]).length;
+  document.getElementById('d-tasks').textContent=`${p0done}/8`;
+  document.getElementById('d-scored').textContent=shortlist.length;
+}
+
+// ── STORAGE ───────────────────────────────────────────────────────────────────
+function saveToStorage(){
+  localStorage.setItem('min_reached',JSON.stringify(reached));
+  localStorage.setItem('min_tasks',JSON.stringify(taskDone));
+  localStorage.setItem('min_shortlist',JSON.stringify(shortlist));
+}
+
+function loadFromStorage(){
+  try{reached=JSON.parse(localStorage.getItem('min_reached')||'{}');}catch(e){}
+  try{taskDone=JSON.parse(localStorage.getItem('min_tasks')||'{}');}catch(e){}
+  try{shortlist=JSON.parse(localStorage.getItem('min_shortlist')||'[]');}catch(e){}
+}
+
+function sendPrompt(t){window.open('https://claude.ai/new?q='+encodeURIComponent(t),'_blank');}
+</script>
+</body>
+</html>
